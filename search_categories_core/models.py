@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone as tz
 
 
 class SearchCategoryCore(models.Model):
@@ -11,6 +12,8 @@ class SearchCategoryCore(models.Model):
         (FULL_WIDTH, "Full Width"),
         (HALF_WIDTH, "Half Width"),
     ]
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()
     name = models.CharField(max_length=50, unique=True)
     code = models.CharField(max_length=20, editable=False, unique=True)
     hierarchy = models.IntegerField(default=1)
@@ -27,3 +30,12 @@ class SearchCategoryCore(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        """
+        Override model save() method to update updated and created at.
+        """
+        self.updated_at = tz.localtime()
+        if not self.pk:
+            self.created_at = tz.localtime()
+        super(SearchCategoryCore, self).save(*args, **kwargs)
