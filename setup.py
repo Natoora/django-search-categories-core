@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="django-search-categories-core",
+    name="search_categories_core",
     version="0.0.1",
     author="Ed Chapman",
     author_email="ed@natoora.com",
