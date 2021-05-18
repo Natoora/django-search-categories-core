@@ -149,15 +149,24 @@ Development
 Testing
 -------
 
-1. Install test requirements
-    ```
-    pip install -r requirements/requirements-testing.txt
-    ```
+1. Setup a virtualenvironment and activate it
 
-2. Run test script:
-    ```
-    (venv) $ python runtests.py
-    ```
+```shell
+python3 -m venv venv
+source venv/bin/activate
+```
+
+2. Install test requirements
+
+ ```
+ pip install -r requirements-dev.txt
+ ```
+
+2. Run tests
+
+ ```
+ (venv) $ python manage.py test
+ ```
 
 ---
 
