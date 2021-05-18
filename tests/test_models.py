@@ -6,7 +6,7 @@ from django.utils import timezone as tz
 from tests.testapp.models.ws_models import WsSearchCategory
 
 
-class SearchCategoryCoreModelTestCase(TestCase):
+class SearchCategoryModelFieldsTestCase(TestCase):
     """
     Tests for the SearchCategoryCore fields.
     """
