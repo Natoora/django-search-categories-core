@@ -4,10 +4,6 @@ django==3.2.3
 # Django rest framework
 djangorestframework==3.12.4
 
-# Django integration with the Pytest framework
-# https://docs.pytest.org/en/6.2.x/contents.html
-pytest-django==4.3.0
-
 # Python imaging library
 # https://pillow.readthedocs.io/
 Pillow==8.2.0

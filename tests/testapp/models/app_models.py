@@ -7,7 +7,12 @@ class AppSearchCategory(SearchCategoryCore):
     """
     Simulates the use of the SearchCategoryCore model in an app backend.
     """
-    pass
+    sub_category = models.ForeignKey(
+        'testapp.AppSearchCategory',
+        null=True, blank=True,
+        on_delete=models.CASCADE
+    )
+    products = models.ManyToManyField('testapp.AppProduct', blank=True)
 
 
 class AppProduct(models.Model):
