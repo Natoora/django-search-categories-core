@@ -41,8 +41,6 @@ MEDIA_ROOT = '/tmp/django_search_categories_test_media/'
 
 MEDIA_PATH = '/media/'
 
-ROOT_URLCONF = 'tests.testapp.urls'
-
 DEBUG = True
 
 TEMPLATE_DEBUG = True
