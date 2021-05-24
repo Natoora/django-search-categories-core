@@ -20,7 +20,8 @@ class SearchCategoryCore(models.Model):
     enabled = models.BooleanField(default=True)
     background_image = models.ImageField(upload_to='products/search_categories/')
     tile_dimensions = models.CharField(max_length=50, choices=DIMENSION_CHOICES, default=FULL_WIDTH)
-    synchronised = models.BooleanField(default=False, help_text="Synchronised with the app")
+    hd_synchronised = models.BooleanField(default=False, help_text="Synchronised with the HD app")
+    pro_synchronised = models.BooleanField(default=False, help_text="Synchronised with the Pro app")
 
     class Meta:
         verbose_name = "Search Category"
@@ -35,6 +36,7 @@ class SearchCategoryCore(models.Model):
         """
         Override model save() method to update updated and created at.
         """
+        self.synchronised = False
         self.updated_at = tz.localtime()
         if not self.pk:
             self.created_at = tz.localtime()
