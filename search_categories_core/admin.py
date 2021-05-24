@@ -16,15 +16,15 @@ class _BaseAdmin(admin.ModelAdmin):
         "sub_category"
     ]
     readonly_fields = [
-        "code",
-        "synchronised"
+        "code"
     ]
     list_display = [
         "hierarchy",
         "name",
         "code",
         "enabled",
-        "synchronised"
+        "hd_synchronised",
+        "pro_synchronised"
     ]
     search_fields = [
         "name",
@@ -32,7 +32,8 @@ class _BaseAdmin(admin.ModelAdmin):
     ]
     list_filter = [
         "enabled",
-        "synchronised"
+        "hd_synchronised",
+        "pro_synchronised"
     ]
 
     def has_add_permission(self, request):
