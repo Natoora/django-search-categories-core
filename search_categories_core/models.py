@@ -36,7 +36,8 @@ class SearchCategoryCore(models.Model):
         """
         Override model save() method to update updated and created at.
         """
-        self.synchronised = False
+        self.hd_synchronised = False
+        self.pro_synchronised = False
         self.updated_at = tz.localtime()
         if not self.pk:
             self.created_at = tz.localtime()
