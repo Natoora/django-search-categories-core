@@ -87,9 +87,9 @@ class SearchCategorySyncService:
         :return: QuerySet, SearchCategory.
         """
         if self.destination_app == "HD":
-            categories = self.WsCatModel.objects.filter(hd_app_synchronised=False)
+            categories = self.WsCatModel.objects.filter(hd_synchronised=False)
         elif self.destination_app == "PRO":
-            categories = self.WsCatModel.objects.filter(pro_app_synchronised=False)
+            categories = self.WsCatModel.objects.filter(pro_synchronised=False)
         else:
             raise RuntimeError(
                 f"The given app=({self.destination_app}) does not match HD or PRO in the category sync service."
