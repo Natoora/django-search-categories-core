@@ -11,17 +11,13 @@ class _BaseAdmin(admin.ModelAdmin):
         "hierarchy",
         "enabled",
         "background_image",
-        "hd_synchronised",
-        "pro_synchronised",
         "sub_category"
     ]
     list_display = [
         "hierarchy",
         "name",
         "code",
-        "enabled",
-        "hd_synchronised",
-        "pro_synchronised"
+        "enabled"
     ]
     search_fields = [
         "name",
@@ -29,8 +25,7 @@ class _BaseAdmin(admin.ModelAdmin):
     ]
     list_filter = [
         "enabled",
-        "hd_synchronised",
-        "pro_synchronised"
+
     ]
 
     def has_view_permission(self, request, obj=None):
@@ -43,9 +38,21 @@ class WsSearchCategoryAdmin(_BaseAdmin):
     """
     WS SearchCategory Model admin page.
     """
-    fields = _BaseAdmin.fields + ["product_bases"]
+    fields = _BaseAdmin.fields + [
+        "product_bases"
+    ]
     readonly_fields = [
-        "code"
+        "code",
+        "hd_synchronised",
+        "pro_synchronised"
+    ]
+    list_display = _BaseAdmin.list_display + [
+        "hd_synchronised",
+        "pro_synchronised"
+    ]
+    list_filter = _BaseAdmin.list_filter + [
+        "hd_synchronised",
+        "pro_synchronised"
     ]
     list_editable = [
         "enabled"
@@ -61,3 +68,12 @@ class AppSearchCategoryAdmin(_BaseAdmin):
     """
     fields = _BaseAdmin.fields + ["products"]
     readonly_fields = fields
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
