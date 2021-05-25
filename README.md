@@ -3,47 +3,37 @@ Django Search Categories Core
 
 Reusable app for Django providing the core functionality for app product search categories.
 
-Client Installation
--------------------
+---
 
-1. Install with pip:
+WS Installation
+---------------
 
+#### Install
  ```shell
  pip install git+https://github.com/Natoora/django-search-categories-core.git@{version}
-
  # Where version can be a tag, a branch, or a commit.
  ```
 
-2. Add "search_categories_core" to your INSTALLED_APPS setting like this:
-
+#### Add to INSTALLED_APPS
  ```python
 INSTALLED_APPS = [
    'search_categories_core',
 ]
  ```
 
-3. Setup WS model
-
-- The section below the "optional" comment provides the logic so that the hierarchy stays in sequence automatically.
-
+#### WS Model
 ```python
 from django.db import models
 from search_categories_core.models import SearchCategoryCore
 from search_categories_core.managers import SearchCategoryManager
 
-
 class SearchCategory(SearchCategoryCore):
    sub_category = models.ForeignKey('products.SearchCategory', null=True, blank=True, on_delete=models.CASCADE)
    product_bases = models.ManyToManyField('products.ProductBase', blank=True)
 
-   """
-   BELOW IS OPTIONAL
-   """
-
    objects = SearchCategoryManager()
 
    def save(self, *args, **kwargs):
-      self.synchronised = False
       self.update_hierarchy(new_position=self.hierarchy)
       super().save(*args, **kwargs)
 
@@ -57,49 +47,37 @@ class SearchCategory(SearchCategoryCore):
       SearchCategory.objects.move(obj=self, old_pos=old_position, new_pos=new_position, save=False)
 ```
 
-4. Setup the model in the app backend
+#### WS App Model
 
-```python
+Add the model in WS that points at the corresponding app model. e.g. ws/backend/natooraapp/models/search_category.py
+
+```python3
 from django.db import models
 from search_categories_core.models import SearchCategoryCore
 
-
 class SearchCategory(SearchCategoryCore):
-   """
-   Category of products to search.
-   """
-   sub_category = models.ForeignKey(
-      'search_categories.SearchCategory',
-      null=True, blank=True,
-      on_delete=models.CASCADE
-   )
-   products = models.ManyToManyField('products.Product', blank=True)
+    """
+    Category of products to search.
+    """
+    sub_category = models.ForeignKey(
+        'natooraapp.SearchCategory',
+        null=True, blank=True,
+        on_delete=models.CASCADE
+    )
+    products = models.ManyToManyField('natooraapp.Product', blank=True)
+
+    class Meta:
+        verbose_name = "Search Category"
+        verbose_name_plural = "Search Categories"
+        ordering = ["hierarchy"]
+        managed = False
+        db_table = 'search_categories_searchcategory'
 ```
 
-5. Setup the corresponding app model in WS to connect to it
+#### Sync Task
 
-```python
-from django.db import models
-from search_categories_core.models import SearchCategoryCore
-
-
-class SearchCategory(SearchCategoryCore):
-   """
-   Category of products to search.
-   """
-   sub_category = models.ForeignKey(
-      'natooraapp.SearchCategory',
-      null=True, blank=True,
-      on_delete=models.CASCADE
-   )
-   products = models.ManyToManyField('natooraapp.Product', blank=True)
-
-   class Meta:
-      managed = False
-      db_table = 'search_categories_searchcategory'
-```
-
-6. Setup the sync task, passing in the relevant model classes
+Import and pass the models for the app you want to sync to the search service and set the destination app name (HD or
+PRO)
 
 ```python
 from sidekick.decorators import sidekick_task
@@ -114,20 +92,101 @@ from natooraapp.models import (
 from natooraapp.settings import get_search_category_scp_destination
 from search_categories_core.services import SearchCategorySyncService
 
-
 @sidekick_task
 def sync_search_categories():
-   """
-   Run sync to create/update search categories between WS and the app.
-   """
-   sync_service = SearchCategorySyncService(
-      WsProduct=WsProduct,
-      WsCategory=WsSearchCategory,
-      AppProduct=AppProduct,
-      AppCategory=AppSearchCategory,
-      image_scp_destination=get_search_category_scp_destination()
-   )
-   sync_service.sync()
+    """
+    Run sync to create/update search categories between WS and the app.
+    """
+    sync_service = SearchCategorySyncService(
+        WsProdModel=WsProduct,
+        WsCatModel=WsSearchCategory,
+        AppProdModel=AppProduct,
+        AppCatModel=AppSearchCategory,
+        image_destination=get_search_category_scp_destination(),
+        destination_app="HD"
+    )
+    sync_service.sync()
+```
+
+#### Migrate DB Changes
+
+ ```shell
+./manage.py makemigrations
+./manage.py migrate
+ ```
+
+#### WS admin
+
+```python
+from products.models import SearchCategory
+from search_categories_core.admin import WsSearchCategoryAdmin
+
+@admin.register(SearchCategory)
+class SearchCategoryAdmin(WsSearchCategoryAdmin):
+    """
+    SearchCategory model admin.
+    """
+    pass
+```
+
+---
+
+App Installation
+----------------
+
+#### Install
+
+ ```shell
+ pip install git+https://github.com/Natoora/django-search-categories-core.git@{version}
+ # Where version can be a tag, a branch, or a commit.
+ ```
+
+#### Add to INSTALLED_APPS
+
+ ```python
+INSTALLED_APPS = [
+   'search_categories_core',
+]
+ ```
+
+#### App Model
+
+```python
+from django.db import models
+from search_categories_core.models import SearchCategoryCore
+
+class SearchCategory(SearchCategoryCore):
+    """
+    Category of products to search.
+    """
+    sub_category = models.ForeignKey(
+        'search_categories.SearchCategory',
+        null=True, blank=True,
+        on_delete=models.CASCADE
+    )
+    products = models.ManyToManyField('products.Product', blank=True)
+```
+
+#### Migrate DB Changes
+
+ ```shell
+./manage.py makemigrations
+./manage.py migrate
+ ```
+
+#### App admin
+
+```python
+from django.contrib import admin
+from search_categories_core.admin import AppSearchCategoryAdmin
+from search_categories.models import SearchCategory
+
+@admin.register(SearchCategory)
+class SearchCategoryAdmin(AppSearchCategoryAdmin):
+    """
+    SearchCategory model admin.
+    """
+    pass
 ```
 
 ---
@@ -135,37 +194,35 @@ def sync_search_categories():
 Development
 -----------
 
-1. Clone the repo.
+#### Clone the repo
 
-2. On the target project run:
-    ```
-    (venv) $ pip install --editable /path/to/django-search-categories-core
-    ```
+```shell
+git clone git@github.com:Natoora/django-search-categories-core.git
+```
 
-3. Run setup instructions as above.
+#### Install in target project in editable mode
+
+ ```shell
+pip install --editable /path/to/django-search-categories-core
+ ```
+
+#### Follow setup instructions as above.
 
 ---
 
 Testing
 -------
 
-1. Setup a virtualenvironment and activate it
+#### Install test requirements
 
-```shell
-python3 -m venv venv
-source venv/bin/activate
-```
-
-2. Install test requirements
-
- ```
+ ```shell
  pip install -r requirements-dev.txt
  ```
 
-2. Run tests
+#### Run tests
 
  ```
- (venv) $ python manage.py test
+python manage.py test
  ```
 
 ---
@@ -173,13 +230,14 @@ source venv/bin/activate
 Releasing
 ---------
 
-1. Increment version number in setup.py
+#### Increment version number in setup.py
 
-2. Commit and push changes.
+#### Commit and push changes.
 
-3. Create release on GitHub with the version number.
+#### Create release on GitHub with the version number.
 
-4. The release can then be installed into Django projects like this:
-    ```
-    git+https://github.com/Natoora/django-search-categories-core.git@{version number}
-    ```
+#### Update the core requirements files in WS and the apps
+
+ ```shell
+ git+https://github.com/Natoora/django-search-categories-core.git@{version number}
+ ```
