@@ -17,11 +17,20 @@ class SearchCategoryCore(models.Model):
     name = models.CharField(max_length=50, unique=True)
     code = models.CharField(max_length=20, editable=False, unique=True)
     hierarchy = models.IntegerField(default=1)
-    enabled = models.BooleanField(default=True)
     background_image = models.ImageField(upload_to='products/search_categories/')
     tile_dimensions = models.CharField(max_length=50, choices=DIMENSION_CHOICES, default=FULL_WIDTH)
-    hd_synchronised = models.BooleanField(default=False, help_text="Synchronised with the HD app")
-    pro_synchronised = models.BooleanField(default=False, help_text="Synchronised with the Pro app")
+    hd_app = models.BooleanField(default=False, help_text="Category will appear on the HD app")
+    pro_app = models.BooleanField(default=False, help_text="Category will appear on the Pro app")
+    hd_synchronised = models.BooleanField(
+        default=False,
+        editable=False,
+        help_text="Synchronised with the HD app"
+    )
+    pro_synchronised = models.BooleanField(
+        default=False,
+        editable=False,
+        help_text="Synchronised with the Pro app"
+    )
 
     class Meta:
         verbose_name = "Search Category"

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="search_categories_core",
-    version="0.0.9",
+    version="0.0.10",
     author="Ed Chapman",
     author_email="ed@natoora.com",
     description="Core functionality for the mobile app product search categories.",

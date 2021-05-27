@@ -9,7 +9,8 @@ class _BaseAdmin(admin.ModelAdmin):
         "name",
         "code",
         "hierarchy",
-        "enabled",
+        "hd_app",
+        "pro_app",
         "background_image",
         "sub_category"
     ]
@@ -17,15 +18,16 @@ class _BaseAdmin(admin.ModelAdmin):
         "hierarchy",
         "name",
         "code",
-        "enabled"
+        "hd_app",
+        "pro_app"
     ]
     search_fields = [
         "name",
         "code"
     ]
     list_filter = [
-        "enabled",
-
+        "hd_app",
+        "pro_app"
     ]
 
     def has_view_permission(self, request, obj=None):
@@ -55,7 +57,8 @@ class WsSearchCategoryAdmin(_BaseAdmin):
         "pro_synchronised"
     ]
     list_editable = [
-        "enabled"
+        "hd_app",
+        "pro_app"
     ]
     filter_horizontal = [
         "product_bases"
