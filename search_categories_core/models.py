@@ -19,8 +19,8 @@ class SearchCategoryCore(models.Model):
     hierarchy = models.IntegerField(default=1)
     background_image = models.ImageField(upload_to='products/search_categories/')
     tile_dimensions = models.CharField(max_length=50, choices=DIMENSION_CHOICES, default=FULL_WIDTH)
-    hd_app = models.BooleanField(default=False, help_text="Category will appear on the HD app")
-    pro_app = models.BooleanField(default=False, help_text="Category will appear on the Pro app")
+    hd_app = models.BooleanField(default=True, help_text="Category will appear on the HD app")
+    pro_app = models.BooleanField(default=True, help_text="Category will appear on the Pro app")
     hd_synchronised = models.BooleanField(
         default=False,
         editable=False,
