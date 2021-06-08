@@ -19,6 +19,7 @@ class SearchCategoryCore(models.Model):
     hierarchy = models.IntegerField(default=1)
     background_image = models.ImageField(upload_to='products/search_categories/')
     tile_dimensions = models.CharField(max_length=50, choices=DIMENSION_CHOICES, default=FULL_WIDTH)
+    enabled = models.BooleanField(default=True)  # TODO - Remove this field once the data is migrated in production.
     hd_app = models.BooleanField(default=True, help_text="Category will appear on the HD app")
     pro_app = models.BooleanField(default=True, help_text="Category will appear on the Pro app")
     hd_synchronised = models.BooleanField(
