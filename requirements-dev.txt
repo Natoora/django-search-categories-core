@@ -1,5 +1,5 @@
 # Django framework
-django==3.2.3
+django==3.2.5
 
 # Django rest framework
 djangorestframework==3.12.4
