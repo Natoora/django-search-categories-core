@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="search_categories_core",
-    version="0.1.0",
+    version="1.0.0",
     author="Ed Chapman",
     author_email="ed@natoora.com",
     description="Core functionality for the mobile app product search categories.",
@@ -25,7 +25,8 @@ setup(
     ],
     python_requires='>=3.6',
     install_requires=[
-        "Django>=2",
+        "Django>=3.2",
         "djangorestframework>=3",
+        "Pillow>=8.3"
     ]
 )
