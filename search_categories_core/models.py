@@ -14,7 +14,7 @@ class SearchCategoryCore(models.Model):
     ]
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     code = models.CharField(max_length=20, editable=False, unique=True)
     hierarchy = models.IntegerField(default=1)
     background_image = models.ImageField(upload_to='products/search_categories/')
