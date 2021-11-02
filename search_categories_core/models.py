@@ -12,6 +12,14 @@ class SearchCategoryCore(models.Model):
         (FULL_WIDTH, "Full Width"),
         (HALF_WIDTH, "Half Width"),
     ]
+
+    HD = "HD"
+    PRO = "PRO"
+    APP_CHOICES = [
+        (HD, 'HD'),
+        (PRO, 'PRO')
+    ]
+
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     name = models.CharField(max_length=50)
@@ -22,6 +30,7 @@ class SearchCategoryCore(models.Model):
     enabled = models.BooleanField(default=True)  # TODO - Remove this field once the data is migrated in production.
     hd_app = models.BooleanField(default=True, help_text="Category will appear on the HD app")
     pro_app = models.BooleanField(default=True, help_text="Category will appear on the Pro app")
+    app_type = models.CharField(max_length=50, choices=APP_CHOICES, default=HD)
     hd_synchronised = models.BooleanField(
         default=False,
         editable=False,
