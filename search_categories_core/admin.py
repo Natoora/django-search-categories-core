@@ -11,6 +11,7 @@ class _BaseAdmin(admin.ModelAdmin):
         "hierarchy",
         "hd_app",
         "pro_app",
+        "app_type",
         "background_image",
         "sub_category"
     ]
@@ -19,7 +20,8 @@ class _BaseAdmin(admin.ModelAdmin):
         "name",
         "code",
         "hd_app",
-        "pro_app"
+        "pro_app",
+        "app_type",
     ]
     search_fields = [
         "name",
@@ -27,7 +29,8 @@ class _BaseAdmin(admin.ModelAdmin):
     ]
     list_filter = [
         "hd_app",
-        "pro_app"
+        "pro_app",
+        "app_type"
     ]
 
     def has_view_permission(self, request, obj=None):
@@ -41,16 +44,19 @@ class WsSearchCategoryAdmin(_BaseAdmin):
     WS SearchCategory Model admin page.
     """
     fields = _BaseAdmin.fields + [
-        "product_bases"
+        "product_bases",
+        "products"
     ]
     readonly_fields = [
         "code",
+        "app_type",
         "hd_synchronised",
         "pro_synchronised"
     ]
     list_display = _BaseAdmin.list_display + [
         "hd_synchronised",
-        "pro_synchronised"
+        "pro_synchronised",
+        "app_type",
     ]
     list_filter = _BaseAdmin.list_filter + [
         "hd_synchronised",
@@ -61,7 +67,8 @@ class WsSearchCategoryAdmin(_BaseAdmin):
         "pro_app"
     ]
     filter_horizontal = [
-        "product_bases"
+        "product_bases",
+        "products"
     ]
 
 

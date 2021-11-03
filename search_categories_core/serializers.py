@@ -19,6 +19,7 @@ class SearchCategorySerializer(ModelSerializer):
             "tile_dimensions",
             "hd_app",
             "pro_app",
+            "app_type",
             "hd_synchronised",
             "pro_synchronised",
         ]
