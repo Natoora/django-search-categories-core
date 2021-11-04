@@ -28,18 +28,11 @@ class SearchCategoryCore(models.Model):
     background_image = models.ImageField(upload_to='products/search_categories/')
     tile_dimensions = models.CharField(max_length=50, choices=DIMENSION_CHOICES, default=FULL_WIDTH)
     enabled = models.BooleanField(default=True)  # TODO - Remove this field once the data is migrated in production.
-    hd_app = models.BooleanField(default=True, help_text="Category will appear on the HD app")
-    pro_app = models.BooleanField(default=True, help_text="Category will appear on the Pro app")
     app_type = models.CharField(max_length=50, choices=APP_CHOICES, default=HD)
-    hd_synchronised = models.BooleanField(
+    synchronised = models.BooleanField(
         default=False,
         editable=False,
-        help_text="Synchronised with the HD app"
-    )
-    pro_synchronised = models.BooleanField(
-        default=False,
-        editable=False,
-        help_text="Synchronised with the Pro app"
+        help_text="Synchronised with the app"
     )
 
     class Meta:
@@ -55,8 +48,7 @@ class SearchCategoryCore(models.Model):
         """
         Override model save() method to update updated and created at.
         """
-        self.hd_synchronised = False
-        self.pro_synchronised = False
+        self.synchronised = False
         self.updated_at = tz.localtime()
         if not self.pk:
             self.created_at = tz.localtime()

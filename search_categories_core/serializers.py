@@ -17,10 +17,7 @@ class SearchCategorySerializer(ModelSerializer):
             "hierarchy",
             "background_image",
             "tile_dimensions",
-            "hd_app",
-            "pro_app",
             "app_type",
-            "hd_synchronised",
-            "pro_synchronised",
+            "synchronised"
         ]
         read_only_fields = fields
