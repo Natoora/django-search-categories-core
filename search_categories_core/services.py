@@ -64,10 +64,12 @@ class SearchCategorySyncService:
         :param ws_sc: WsSearchCategory.
         :param app_sc: AppSearchCategory.
         """
-        for ws_p in ws_sc.products:
-            app_p = self.AppProdModel.objects.filter(code=ws_p.code).first()
-            if app_p:  # The product may not have been synchronised yet
-                app_sc.products.add(app_p)
+        ws_sc_products = ws_sc.products.all()
+        if ws_sc_products:
+            for ws_p in ws_sc_products:
+                app_p = self.AppProdModel.objects.filter(code=ws_p.code).first()
+                if app_p:  # The product may not have been synchronised yet
+                    app_sc.products.add(app_p)
 
     def remove_products(self, ws_sc, app_sc):
         """Remove any products from the app search category

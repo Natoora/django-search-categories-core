@@ -45,7 +45,9 @@ class WsSearchCategoryAdmin(_BaseAdmin):
     """
     fields = _BaseAdmin.fields + [
         "product_bases",
-        "products"
+        "products",
+        "hd_synchronised",
+        "pro_synchronised"
     ]
     readonly_fields = [
         "code",
@@ -76,7 +78,7 @@ class AppSearchCategoryAdmin(_BaseAdmin):
     """
     App SearchCategory Model admin page.
     """
-    fields = _BaseAdmin.fields + ["products"]
+    fields = _BaseAdmin.fields
     readonly_fields = fields
 
     def has_add_permission(self, request):
