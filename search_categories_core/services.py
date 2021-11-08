@@ -27,7 +27,7 @@ class SearchCategorySyncService:
         """Update/create App search categories for
         any WS ones which are not synchronised.
         """
-        categories = self.WsCatModel.objects.filter(synchronised=False)
+        categories = self.categories_to_sync()
         for ws_sc in categories:
             app_sc = self.update_app_search_category(ws_sc=ws_sc)
             self.add_products(ws_sc=ws_sc, app_sc=app_sc)
@@ -81,49 +81,17 @@ class SearchCategorySyncService:
             if not ws_sc.products.filter(code=ws_p.code):
                 app_sc.products.remove(app_p)
 
-    # def categories_to_sync(self):
-    #     """Return a queryset of SearchCategories to sync depending on the app destination.
-    #
-    #     :return: QuerySet, SearchCategory.
-    #     """
-    #     if self.destination_app == "HD":
-    #         # categories = self.WsCatModel.objects.filter(hd_synchronised=False)
-    #         categories = self.WsCatModel.objects.filter(app_type="HD")
-    #     elif self.destination_app == "PRO":
-    #         # categories = self.WsCatModel.objects.filter(pro_synchronised=False)
-    #         categories = self.WsCatModel.objects.filter(app_type="PRO")
-    #     else:
-    #         raise RuntimeError(
-    #             f"The given app=({self.destination_app}) does not match HD or PRO in the category sync service."
-    #         )
-    #     return categories
-
-    # def products_to_sync(self, product_base):
-    #     """Return a queryset of products to sync depending on the app destination.
-    #
-    #     :param product_base: ProductBase model instance.
-    #     :return: QuerySet, Products.
-    #     """
-    #     if self.destination_app == "HD":
-    #         products = product_base.product_set.filter(trade__configuration__natoora_app=True)
-    #     elif self.destination_app == "PRO":
-    #         products = product_base.product_set.filter(trade__configuration__natoora_pro=True)
-    #     else:
-    #         raise RuntimeError(
-    #             f"The given app=({self.destination_app}) does not match HD or PRO in the category sync service."
-    #         )
-    #     return products
-
-    # def set_sync_flags(self, categories):
-    #     """Set sync flags depending on the app destination.
-    #
-    #     :param categories: QuerySet, SearchCategory.
-    #     """
-    #     if self.destination_app == "HD":
-    #         categories.update(hd_synchronised=True)
-    #     elif self.destination_app == "PRO":
-    #         categories.update(pro_synchronised=True)
-    #     else:
-    #         raise RuntimeError(
-    #             f"The given app=({self.destination_app}) does not match HD or PRO in the category sync service."
-    #         )
+    def categories_to_sync(self):
+        """Return a queryset of SearchCategories to sync depending on the app destination.
+        :return: QuerySet, SearchCategory.
+        """
+        categories = self.WsCatModel.objects.filter(synchronised=False)
+        if self.destination_app == "HD":
+            categories = categories.filter(app_type="HD")
+        elif self.destination_app == "PRO":
+            categories = categories.filter(app_type="PRO")
+        else:
+            raise RuntimeError(
+                f"The given app=({self.destination_app}) does not match HD or PRO in the category sync service."
+            )
+        return categories
