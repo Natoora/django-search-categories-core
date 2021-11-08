@@ -17,7 +17,6 @@ class _BaseAdmin(admin.ModelAdmin):
         "hierarchy",
         "name",
         "code",
-        "app_type",
     ]
     search_fields = [
         "name",
@@ -44,7 +43,7 @@ class WsSearchCategoryAdmin(_BaseAdmin):
     ]
     readonly_fields = [
         "code",
-        "app_type",
+        "synchronised",
     ]
     list_display = _BaseAdmin.list_display + [
         "synchronised",
@@ -52,9 +51,6 @@ class WsSearchCategoryAdmin(_BaseAdmin):
     ]
     list_filter = _BaseAdmin.list_filter + [
         "synchronised",
-    ]
-    list_editable = [
-        "app_type",
     ]
     filter_horizontal = [
         "product_bases",
