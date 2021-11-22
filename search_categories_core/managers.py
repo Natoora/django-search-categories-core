@@ -11,11 +11,16 @@ class SearchCategoryManager(models.Manager):
         """
         When creating a SearchCategory
         Populate the hierarchy field with the max hierarchy + 1.
+        BUT taking into account the SC APP_TYPE too
         """
         instance = self.model(**kwargs)
         with transaction.atomic():
-            hierarchy_max = self.aggregate(Max('hierarchy')).get('hierarchy__max') or 0
-            instance.hierarchy = hierarchy_max + 1
+            # Only update the hierarchy FIELD related to this instance's app_type: HD or PRO
+            hierarchy_field_str = 'hierarchy_' + instance.app_type.lower()
+            hierarchy_max_str = hierarchy_field_str + '__max'
+            hierarchy_max = self.aggregate(Max(hierarchy_field_str)).get(hierarchy_max_str) or 0
+            new_hierarchy = hierarchy_max + 1
+            setattr(instance, hierarchy_field_str, new_hierarchy)
             instance.save()
             return instance
 
