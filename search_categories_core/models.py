@@ -6,27 +6,19 @@ class SearchCategoryCore(models.Model):
     """
     Category of products to search.
     """
-    # FULL_WIDTH = "FULL_WIDTH"
-    # HALF_WIDTH = "HALF_WIDTH"
-    # DIMENSION_CHOICES = [
-    #     (FULL_WIDTH, "Full Width"),
-    #     (HALF_WIDTH, "Half Width"),
-    # ]
-    #
-    # HD = "HD"
-    # PRO = "PRO"
-    # APP_CHOICES = [
-    #     (HD, 'HD'),
-    #     (PRO, 'PRO')
-    # ]
+    FULL_WIDTH = "FULL_WIDTH"
+    HALF_WIDTH = "HALF_WIDTH"
+    DIMENSION_CHOICES = [
+        (FULL_WIDTH, "Full Width"),
+        (HALF_WIDTH, "Half Width"),
+    ]
 
-    class AppChoices(models.TextChoices):
-        HD = 'HD', 'HD'
-        PRO = 'PRO', 'PRO'
-
-    class DimensionChoices(models.TextChoices):
-        FULL_WIDTH = 'FULL_WIDTH', 'Full Width'
-        HALF_WIDTH = 'HALF_WIDTH', 'Half Width'
+    HD = "HD"
+    PRO = "PRO"
+    APP_CHOICES = [
+        (HD, 'HD'),
+        (PRO, 'PRO')
+    ]
 
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
@@ -34,9 +26,9 @@ class SearchCategoryCore(models.Model):
     code = models.CharField(max_length=20, editable=False, unique=True)
     hierarchy = models.IntegerField(default=1)
     background_image = models.ImageField(upload_to='products/search_categories/')
-    tile_dimensions = models.CharField(max_length=50, choices=DimensionChoices, default=DimensionChoices.FULL_WIDTH)
+    tile_dimensions = models.CharField(max_length=50, choices=DIMENSION_CHOICES, default=FULL_WIDTH)
     enabled = models.BooleanField(default=False)
-    app_type = models.CharField(max_length=50, choices=AppChoices, default=AppChoices.HD)
+    app_type = models.CharField(max_length=50, choices=APP_CHOICES, default=HD)
     synchronised = models.BooleanField(
         default=False,
         editable=False,
