@@ -15,8 +15,11 @@ class SearchCategorySerializer(ModelSerializer):
             "name",
             "code",
             "hierarchy",
+            "hierarchy_hd",
+            "hierarchy_pro",
             "background_image",
             "tile_dimensions",
+            "enabled",
             "app_type",
             "synchronised"
         ]
