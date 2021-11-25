@@ -42,13 +42,11 @@ class SearchCategoryManager(models.Manager):
         with transaction.atomic():
             if old_pos > int(new_pos):
                 qs = qs.filter(**{(field+'__lt'): old_pos, (field+'__gte'): new_pos}).exclude(pk=obj.pk)
-                print(qs)
                 qs.update(
                     **{field: F(field) + 1}
                 )
             elif old_pos < int(new_pos):
                 qs = qs.filter(**{(field+'__lte'): new_pos, (field+'__gt'): old_pos}).exclude(pk=obj.pk)
-                print(qs)
                 qs.update(
                     **{field: F(field) - 1}
                 )
