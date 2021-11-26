@@ -48,6 +48,8 @@ class SearchCategorySyncService:
         app_c.name = ws_sc.name
         app_c.app_type = ws_sc.app_type
         app_c.hierarchy = ws_sc.hierarchy
+        app_c.hierarchy_hd = ws_sc.hierarchy_hd
+        app_c.hierarchy_pro = ws_sc.hierarchy_pro
         app_c.tile_dimensions = ws_sc.tile_dimensions
         app_c.background_image.name = ws_sc.background_image.name
         app_c.save()
