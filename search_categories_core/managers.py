@@ -50,6 +50,7 @@ class SearchCategoryManager(models.Manager):
                 qs.update(
                     **{field: F(field) - 1}
                 )
+            setattr(obj, field, new_pos)
             obj.hierarchy = new_pos
             if save:
                 obj.save()
