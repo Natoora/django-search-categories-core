@@ -24,8 +24,6 @@ class SearchCategoryCore(models.Model):
     updated_at = models.DateTimeField()
     name = models.CharField(max_length=50)
     code = models.CharField(max_length=20, editable=False, unique=True)
-    hierarchy_pro = models.IntegerField(default=0)
-    hierarchy_hd = models.IntegerField(default=0)
     hierarchy = models.IntegerField(default=1)
     background_image = models.ImageField(upload_to='products/search_categories/')
     tile_dimensions = models.CharField(max_length=50, choices=DIMENSION_CHOICES, default=FULL_WIDTH)

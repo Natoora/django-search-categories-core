@@ -16,15 +16,12 @@ class SearchCategoryManager(models.Manager):
         instance = self.model(**kwargs)
         with transaction.atomic():
             # Only update the hierarchy FIELD related to this instance's app_type: HD or PRO
-            hierarchy_field_str = 'hierarchy_' + instance.app_type.lower()
-            hierarchy_max_str = hierarchy_field_str + '__max'
-            hierarchy_max = self.aggregate(Max(hierarchy_field_str)).get(hierarchy_max_str) or 0
-            new_hierarchy = hierarchy_max + 1
-            setattr(instance, hierarchy_field_str, new_hierarchy)
+            hierarchy_max = self.filter(app_type=instance.app_type).aggregate(Max('hierarchy')).get('hierarchy__max') or 1
+            instance.hierarchy = hierarchy_max + 1
             instance.save()
             return instance
 
-    def move(self, obj, old_pos, new_pos, field, save=True):
+    def move(self, obj, old_pos, new_pos, app_type, save=True):
         """Insert at position in the hierarchy and adjust the
         rest of the search categories' hierarchies so they're  in sequence.
 
@@ -35,22 +32,20 @@ class SearchCategoryManager(models.Manager):
         :param obj: SearchCategory to move.
         :param old_pos: Hierarchy moving from.
         :param new_pos: Hierarchy number to move to.
-        :param field: The hierarchy model field to update, either hierarchy_hd or hierarchy_pro
+        :param app_type: The app specific SC to change, either hd or pro
         :param save: Optionally disable the save, so this can be called in the pre save.
         """
         qs = self.get_queryset()
+        qs.filter(app_type=app_type)
         with transaction.atomic():
             if old_pos > int(new_pos):
-                qs = qs.filter(**{(field+'__lt'): old_pos, (field+'__gte'): new_pos}).exclude(pk=obj.pk)
-                qs.update(
-                    **{field: F(field) + 1}
+                qs.filter(hierarchy__lt=old_pos, hierarchy__gte=new_pos).exclude(pk=obj.pk).update(
+                    hierarchy=F('hierarchy') + 1
                 )
             elif old_pos < int(new_pos):
-                qs = qs.filter(**{(field+'__lte'): new_pos, (field+'__gt'): old_pos}).exclude(pk=obj.pk)
-                qs.update(
-                    **{field: F(field) - 1}
+                qs.filter(hierarchy__lte=new_pos, hierarchy__gt=old_pos).exclude(pk=obj.pk).update(
+                    hierarchy=F('hierarchy') - 1
                 )
-            setattr(obj, field, new_pos)
             obj.hierarchy = new_pos
             if save:
                 obj.save()
