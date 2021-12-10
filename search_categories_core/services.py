@@ -52,6 +52,7 @@ class SearchCategorySyncService:
         app_c.hierarchy_pro = ws_sc.hierarchy_pro
         app_c.tile_dimensions = ws_sc.tile_dimensions
         app_c.background_image.name = ws_sc.background_image.name
+        app_c.enabled = ws_sc.enabled
         app_c.save()
         if ws_sc.background_image.name:
             os.system(f"scp {ws_sc.background_image.path} {self.image_destination}")

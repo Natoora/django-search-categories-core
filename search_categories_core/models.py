@@ -24,13 +24,13 @@ class SearchCategoryCore(models.Model):
     updated_at = models.DateTimeField()
     name = models.CharField(max_length=50)
     code = models.CharField(max_length=20, editable=False, unique=True)
-    hierarchy_pro = models.IntegerField(default=0)
-    hierarchy_hd = models.IntegerField(default=0)
     hierarchy = models.IntegerField(default=1)
     background_image = models.ImageField(upload_to='products/search_categories/')
     tile_dimensions = models.CharField(max_length=50, choices=DIMENSION_CHOICES, default=FULL_WIDTH)
     enabled = models.BooleanField(default=False)
     app_type = models.CharField(max_length=50, choices=APP_CHOICES, default=HD)
+    hd_app = models.BooleanField(default=True, help_text="Category will appear on the HD app")
+    pro_app = models.BooleanField(default=True, help_text="Category will appear on the Pro app")
     synchronised = models.BooleanField(
         default=False,
         editable=False,
@@ -40,7 +40,6 @@ class SearchCategoryCore(models.Model):
     class Meta:
         verbose_name = "Search Category"
         verbose_name_plural = "Search Categories"
-        ordering = ["hierarchy"]
         abstract = True
 
     def __str__(self):
