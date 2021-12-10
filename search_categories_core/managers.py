@@ -16,7 +16,7 @@ class SearchCategoryManager(models.Manager):
         instance = self.model(**kwargs)
         with transaction.atomic():
             # Only update the hierarchy FIELD related to this instance's app_type: HD or PRO
-            hierarchy_max = self.filter(app_type=instance.app_type).aggregate(Max('hierarchy')).get('hierarchy__max') or 1
+            hierarchy_max = self.filter(app_type=instance.app_type).aggregate(Max('hierarchy')).get('hierarchy__max') or 0
             instance.hierarchy = hierarchy_max + 1
             instance.save()
             return instance
@@ -46,6 +46,8 @@ class SearchCategoryManager(models.Manager):
                 qs.filter(hierarchy__lte=new_pos, hierarchy__gt=old_pos).exclude(pk=obj.pk).update(
                     hierarchy=F('hierarchy') - 1
                 )
+            if new_pos == 0:
+                new_pos = 1
             obj.hierarchy = new_pos
             if save:
                 obj.save()
