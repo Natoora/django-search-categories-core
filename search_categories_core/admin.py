@@ -9,8 +9,6 @@ class _BaseAdmin(admin.ModelAdmin):
         "name",
         "code",
         "hierarchy",
-        "hierarchy_hd",
-        "hierarchy_pro",
         "app_type",
         "hd_app",
         "pro_app",
@@ -19,8 +17,6 @@ class _BaseAdmin(admin.ModelAdmin):
     ]
     list_display = [
         "hierarchy",
-        "hierarchy_hd",
-        "hierarchy_pro",
         "hd_app",
         "pro_app",
         "name",
