@@ -6,4 +6,4 @@ djangorestframework==3.12.4
 
 # Python imaging library
 # https://pillow.readthedocs.io/
-Pillow==8.3.2
+Pillow==9.0.0
