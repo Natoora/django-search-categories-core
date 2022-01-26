@@ -13,7 +13,7 @@ class _BaseAdmin(admin.ModelAdmin):
         "hd_app",
         "pro_app",
         "background_image",
-        "sub_category"
+        "sub_category",
     ]
     list_display = [
         "hierarchy",
@@ -45,7 +45,9 @@ class WsSearchCategoryAdmin(_BaseAdmin):
     fields = _BaseAdmin.fields + [
         "product_bases",
         "products",
-        "synchronised"
+        "synchronised",
+        "deleted",
+        "deleted_at"
     ]
     readonly_fields = [
         "code",
@@ -54,6 +56,7 @@ class WsSearchCategoryAdmin(_BaseAdmin):
     list_display = _BaseAdmin.list_display + [
         "synchronised",
         "app_type",
+        "deleted"
     ]
     list_filter = _BaseAdmin.list_filter + [
         "synchronised",

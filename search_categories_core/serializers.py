@@ -19,6 +19,8 @@ class SearchCategorySerializer(ModelSerializer):
             "tile_dimensions",
             "enabled",
             "app_type",
-            "synchronised"
+            "synchronised",
+            "products",
+            "deleted"
         ]
         read_only_fields = fields
