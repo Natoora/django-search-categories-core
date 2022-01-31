@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone as tz
 
 
@@ -20,8 +21,8 @@ class SearchCategoryCore(models.Model):
         (PRO, 'PRO')
     ]
 
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(default=tz.now())
+    updated_at = models.DateTimeField(default=tz.now())
     name = models.CharField(max_length=50)
     code = models.CharField(max_length=20, editable=False, unique=True)
     hierarchy = models.IntegerField(default=1)
@@ -38,6 +39,12 @@ class SearchCategoryCore(models.Model):
     )
 
     class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["name", "app_type"],
+                condition=Q(deleted=False),
+                name="name_app_type_unique_if_not_deleted")
+        ]
         verbose_name = "Search Category"
         verbose_name_plural = "Search Categories"
         abstract = True

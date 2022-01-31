@@ -6,6 +6,7 @@ class _BaseAdmin(admin.ModelAdmin):
     Sections that are common to admin pages on both WS and the apps.
     """
     fields = [
+        "id",
         "name",
         "code",
         "hierarchy",
