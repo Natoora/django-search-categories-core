@@ -21,8 +21,8 @@ class SearchCategoryCore(models.Model):
         (PRO, 'PRO')
     ]
 
-    created_at = models.DateTimeField(default=tz.now())
-    updated_at = models.DateTimeField(default=tz.now())
+    created_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
     name = models.CharField(max_length=50)
     code = models.CharField(max_length=20, editable=False, unique=True)
     hierarchy = models.IntegerField(default=1)
@@ -37,6 +37,8 @@ class SearchCategoryCore(models.Model):
         editable=False,
         help_text="Synchronised with the app"
     )
+    deleted = models.BooleanField(default=False)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         constraints = [
