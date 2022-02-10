@@ -39,13 +39,16 @@ class SearchCategoryManager(models.Manager):
         qs.filter(app_type=app_type)
         with transaction.atomic():
             temp_new_pos = int('99999' if new_pos is None else new_pos)
-            if old_pos > temp_new_pos:
-                qs.filter(hierarchy__lt=old_pos, hierarchy__gte=temp_new_pos).exclude(pk=obj.pk).update(
-                    hierarchy=F('hierarchy') + 1
+            temp_old_pos = int('99999' if old_pos is None else old_pos)
+            if temp_old_pos > temp_new_pos:
+                qs.filter(hierarchy__lt=temp_old_pos, hierarchy__gte=temp_new_pos).exclude(pk=obj.pk).update(
+                    hierarchy=F('hierarchy') + 1,
+                    synchronised=False
                 )
-            elif old_pos < temp_new_pos:
-                qs.filter(hierarchy__lte=temp_new_pos, hierarchy__gt=old_pos).exclude(pk=obj.pk).update(
-                    hierarchy=F('hierarchy') - 1
+            elif temp_old_pos < temp_new_pos:
+                qs.filter(hierarchy__lte=temp_new_pos, hierarchy__gt=temp_old_pos).exclude(pk=obj.pk).update(
+                    hierarchy=F('hierarchy') - 1,
+                    synchronised=False
                 )
             if temp_new_pos == 0:
                 new_pos = 1
