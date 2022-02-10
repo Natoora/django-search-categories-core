@@ -14,6 +14,7 @@ class _BaseAdmin(admin.ModelAdmin):
         "pro_app",
         "background_image",
         "sub_category",
+        "enabled",
         "deleted",
     ]
     list_display = [
@@ -22,6 +23,7 @@ class _BaseAdmin(admin.ModelAdmin):
         "pro_app",
         "name",
         "code",
+        "enabled",
         "deleted"
     ]
     search_fields = [
