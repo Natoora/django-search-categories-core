@@ -36,17 +36,16 @@ class SearchCategoryManager(models.Manager):
         :param save: Optionally disable the save, so this can be called in the pre save.
         """
         qs = self.get_queryset()
-        qs.filter(app_type=app_type)
         with transaction.atomic():
             temp_new_pos = int('99999' if new_pos is None else new_pos)
             temp_old_pos = int('99999' if old_pos is None else old_pos)
             if temp_old_pos > temp_new_pos:
-                qs.filter(hierarchy__lt=temp_old_pos, hierarchy__gte=temp_new_pos).exclude(pk=obj.pk).update(
+                qs.filter(app_type=app_type, hierarchy__lt=temp_old_pos, hierarchy__gte=temp_new_pos).exclude(pk=obj.pk).update(
                     hierarchy=F('hierarchy') + 1,
                     synchronised=False
                 )
             elif temp_old_pos < temp_new_pos:
-                qs.filter(hierarchy__lte=temp_new_pos, hierarchy__gt=temp_old_pos).exclude(pk=obj.pk).update(
+                qs.filter(app_type=app_type, hierarchy__lte=temp_new_pos, hierarchy__gt=temp_old_pos).exclude(pk=obj.pk).update(
                     hierarchy=F('hierarchy') - 1,
                     synchronised=False
                 )
