@@ -10,8 +10,6 @@ class _BaseAdmin(admin.ModelAdmin):
         "code",
         "hierarchy",
         "app_type",
-        "hd_app",
-        "pro_app",
         "background_image",
         "sub_category",
         "enabled",
@@ -19,8 +17,6 @@ class _BaseAdmin(admin.ModelAdmin):
     ]
     list_display = [
         "hierarchy",
-        "hd_app",
-        "pro_app",
         "name",
         "code",
         "enabled",
@@ -32,8 +28,6 @@ class _BaseAdmin(admin.ModelAdmin):
     ]
     list_filter = [
         "app_type",
-        "hd_app",
-        "pro_app",
     ]
 
     def has_view_permission(self, request, obj=None):
@@ -62,10 +56,6 @@ class WsSearchCategoryAdmin(_BaseAdmin):
     ]
     list_filter = _BaseAdmin.list_filter + [
         "synchronised",
-    ]
-    list_editable = [
-        "hd_app",
-        "pro_app"
     ]
     filter_horizontal = [
         "product_bases",

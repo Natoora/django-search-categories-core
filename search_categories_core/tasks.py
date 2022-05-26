@@ -4,8 +4,8 @@ def search_categories_deployment_tasks():
     These tasks populate the new search category format with the old data,
     also separating out any sc that are applied across both apps.
     """
-    populate_search_category_products()
     populate_search_category_app_type()
+    populate_search_category_products()
     populate_search_category_hierarchy()
 
 
@@ -15,7 +15,6 @@ def populate_search_category_products():
     """
     print('Starting product population')
     errors = []
-
     from products.models import SearchCategory
     scs = SearchCategory.objects.all()
     for sc in scs:
@@ -49,13 +48,11 @@ def populate_search_category_app_type():
     """
     from products.models import SearchCategory
     scs = SearchCategory.objects.all()
-
     errors = []
     print('Starting app type population')
-
     for sc in scs:
         try:
-            if (sc.hd_app and sc.pro_app) or (sc.name == 'Melilot' or sc.name == 'Melilot Farm'):
+            if (sc.hd_app and sc.pro_app):
                 print(f'Create a new one: {sc.name}')
                 sc.app_type = sc.HD
                 sc.save()
@@ -65,7 +62,6 @@ def populate_search_category_app_type():
                 new_sc.tile_dimensions = sc.tile_dimensions
                 new_sc.enabled = sc.enabled
                 new_sc.app_type = sc.PRO
-                new_sc.save()
                 product_bases = sc.product_bases.all()
                 for p in product_bases:
                     new_sc.product_bases.add(p)
@@ -84,7 +80,6 @@ def populate_search_category_app_type():
                 sc.app_type = sc.PRO
                 sc.save()
                 continue
-
             print(f'Neither selected {sc.name}')
             sc.app_type = sc.HD
             sc.save()
@@ -103,25 +98,20 @@ def populate_search_category_hierarchy():
     """
     print('Starting hierarchy task')
     errors = []
-
     from products.models import SearchCategory
     types = ['HD', 'PRO']
-
     for t in types:
         try:
-            scs = SearchCategory.objects.filter(app_type=t)
+            scs = SearchCategory.objects.filter(app_type=t).order_by('hierarchy')
             counter = 0
-
             for index, sc in enumerate(scs):
-
                 print(sc, index)
                 counter += 1
                 sc.hierarchy = counter
-
+            # Bulk update so not to trigger save method and move other hierarchies...
             SearchCategory.objects.bulk_update(scs, ['hierarchy'])
         except Exception as e:
             errors.append(e)
-
     print('Finished hierarchy task')
     if errors:
         print('ERRORS:')
