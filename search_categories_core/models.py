@@ -30,8 +30,6 @@ class SearchCategoryCore(models.Model):
     tile_dimensions = models.CharField(max_length=50, choices=DIMENSION_CHOICES, default=FULL_WIDTH)
     enabled = models.BooleanField(default=False)
     app_type = models.CharField(max_length=50, choices=APP_CHOICES, default=HD)
-    hd_app = models.BooleanField(default=True, help_text="Category will appear on the HD app")
-    pro_app = models.BooleanField(default=True, help_text="Category will appear on the Pro app")
     synchronised = models.BooleanField(
         default=False,
         editable=False,
