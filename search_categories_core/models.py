@@ -1,6 +1,12 @@
+import os
+
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone as tz
+
+from .gcloud_storage import GCloudStorage
+
+image_cdn_location = os.environ.get("SEARCH_CATEGORY_IMAGE_CDN_LOCATION", None)
 
 
 class SearchCategoryCore(models.Model):
@@ -27,6 +33,13 @@ class SearchCategoryCore(models.Model):
     code = models.CharField(max_length=20, editable=False, unique=True)
     hierarchy = models.IntegerField(default=1, null=True, blank=True)
     background_image = models.ImageField(upload_to='products/search_categories/')
+    image_cdn = models.ImageField(
+        upload_to=image_cdn_location,
+        null=True,
+        blank=True,
+        storage=GCloudStorage(),
+        help_text="Google Cloud Stored product image.",
+    )
     tile_dimensions = models.CharField(max_length=50, choices=DIMENSION_CHOICES, default=FULL_WIDTH)
     enabled = models.BooleanField(default=False)
     app_type = models.CharField(max_length=50, choices=APP_CHOICES, default=HD)
