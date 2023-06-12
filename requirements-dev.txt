@@ -1,5 +1,6 @@
 # CDN File Storage
-django-storages[google]==1.10.0
+# django-storages[google]
+django-storages==1.13.1
 
 # Django framework
 django==3.2.15
