@@ -16,6 +16,7 @@ class SearchCategorySerializer(ModelSerializer):
             "code",
             "hierarchy",
             "background_image",
+            "image_cdn",
             "tile_dimensions",
             "enabled",
             "app_type",

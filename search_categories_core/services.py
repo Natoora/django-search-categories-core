@@ -50,6 +50,12 @@ class SearchCategorySyncService:
         app_c.hierarchy = ws_sc.hierarchy
         app_c.tile_dimensions = ws_sc.tile_dimensions
         app_c.background_image.name = ws_sc.background_image.name
+        with ws_sc.background_image.open() as img:
+            app_c.image_cdn.save(
+                name=os.path.basename(ws_sc.background_image.name),
+                content=File(img),
+                save=False,
+            )
         app_c.enabled = ws_sc.enabled
         app_c.deleted = ws_sc.deleted
         app_c.save()
@@ -79,9 +85,14 @@ class SearchCategorySyncService:
         :param app_sc: AppSearchCategory.
         """
         for app_p in app_sc.products.all():
-            ws_p = self.WsProdModel.objects.get(code=app_p.code)
-            if not ws_sc.products.filter(code=ws_p.code):
+            try:
+                ws_p = self.WsProdModel.objects.get(code=app_p.code)
+                if not ws_sc.products.filter(code=ws_p.code):
+                    app_sc.products.remove(app_p)
+            except WsProdModel.DoesNotExist:
+                # Product does not exist on WS
                 app_sc.products.remove(app_p)
+                continue
 
     def categories_to_sync(self):
         """Return a queryset of SearchCategories to sync depending on the app destination.
