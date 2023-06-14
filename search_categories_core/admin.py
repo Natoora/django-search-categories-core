@@ -11,6 +11,7 @@ class _BaseAdmin(admin.ModelAdmin):
         "hierarchy",
         "app_type",
         "background_image",
+        "image_cdn",
         "sub_category",
         "enabled",
         "deleted",
