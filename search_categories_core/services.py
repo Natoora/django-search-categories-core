@@ -1,5 +1,7 @@
 import os
 
+from django.core.files import File
+
 
 class SearchCategorySyncService:
     """

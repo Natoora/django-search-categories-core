@@ -6,7 +6,7 @@ from django.utils import timezone as tz
 
 from .gcloud_storage import GCloudStorage
 
-image_cdn_location = os.environ.get("SEARCH_CATEGORY_IMAGE_CDN_LOCATION", None)
+image_cdn_location = os.environ.get("SEARCH_CATEGORY_IMAGE_CDN_LOCATION", "search_categories/images")
 
 
 class SearchCategoryCore(models.Model):
