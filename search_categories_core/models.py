@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.utils import timezone as tz
 
 from .gcloud_storage import GCloudStorage
+from .services import update_image_blurred_hash
 
 image_cdn_location = os.environ.get("SEARCH_CATEGORY_IMAGE_CDN_LOCATION", "search_categories/images")
 
