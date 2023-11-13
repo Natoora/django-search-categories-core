@@ -12,6 +12,7 @@ class _BaseAdmin(admin.ModelAdmin):
         "app_type",
         "background_image",
         "image_cdn",
+        "image_blurred_hash",
         "sub_category",
         "enabled",
         "deleted",

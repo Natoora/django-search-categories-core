@@ -1,12 +1,12 @@
+import blurhash
 import os
+from io import BytesIO
 
 from django.core.files import File
 
 
 class SearchCategorySyncService:
-    """
-    Logic to create/update WS search categories and add/remove products to the defined app.
-    """
+    """Logic to create/update WS search categories and add/remove products to the defined app"""
 
     def __init__(self, WsProdModel, WsCatModel, AppProdModel, AppCatModel, image_destination, destination_app):
         """Setup service with objects to sync.
@@ -58,6 +58,7 @@ class SearchCategorySyncService:
                 content=File(img),
                 save=False,
             )
+        app_c.image_blurred_hash = ws_sc.image_blurred_hash
         app_c.enabled = ws_sc.enabled
         app_c.deleted = ws_sc.deleted
         app_c.save()
@@ -110,3 +111,18 @@ class SearchCategorySyncService:
                 f"The given app=({self.destination_app}) does not match HD or PRO in the category sync service."
             )
         return categories
+
+
+def update_image_blurred_hash(category):
+    """This method updates the input category's image_blurred_hash_field
+
+    It is used in the pre_save, so only need to 'set' the field"""
+
+    if category.background_image:
+        image_content = category.background_image.read()
+        hash_value = blurhash.encode(
+            BytesIO(image_content), x_components=9, y_components=9
+        )
+        category.image_blurred_hash = hash_value
+    else:
+        category.image_blurred_hash = None
