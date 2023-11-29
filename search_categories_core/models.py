@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.utils import timezone as tz
 
 from .gcloud_storage import GCloudStorage
+from .services import update_image_blurred_hash
 
 image_cdn_location = os.environ.get("SEARCH_CATEGORY_IMAGE_CDN_LOCATION", "search_categories/images")
 
@@ -40,6 +41,12 @@ class SearchCategoryCore(models.Model):
         storage=GCloudStorage(),
         help_text="Google Cloud Stored product image.",
     )
+    image_blurred_hash = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        help_text="Hash to store blurred version of image_cdn",
+    )
     tile_dimensions = models.CharField(max_length=50, choices=DIMENSION_CHOICES, default=FULL_WIDTH)
     enabled = models.BooleanField(default=False)
     app_type = models.CharField(max_length=50, choices=APP_CHOICES, default=HD)
@@ -73,4 +80,5 @@ class SearchCategoryCore(models.Model):
         self.updated_at = tz.localtime()
         if not self.pk:
             self.created_at = tz.localtime()
+        update_image_blurred_hash(self)
         super(SearchCategoryCore, self).save(*args, **kwargs)
