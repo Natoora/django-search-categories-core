@@ -14,16 +14,21 @@ class SearchCategoryManager(models.Manager):
         BUT taking into account the SC APP_TYPE too
         """
         instance = self.model(**kwargs)
-        with transaction.atomic():
-            # Only update the hierarchy FIELD related to this instance's app_type: HD or PRO
-            hierarchy_max = self.filter(app_type=instance.app_type).aggregate(Max('hierarchy')).get('hierarchy__max') or 0
-            instance.hierarchy = hierarchy_max + 1
-            instance.save()
-            return instance
+        if not instance.has_attr("parent") or (instance.has_attr("parent") and instance.parent is None):
+            with transaction.atomic():
+                # Only update the hierarchy FIELD related to this instance's app_type: HD or PRO
+                # Also ignore sub categories - cats with parent field
+                hierarchy_max = self.filter(
+                    app_type=instance.app_type,
+                    parent__isnull=True,
+                ).aggregate(Max('hierarchy')).get('hierarchy__max') or 0
+                instance.hierarchy = hierarchy_max + 1
+                instance.save()
+                return instance
 
     def move(self, obj, old_pos, new_pos, app_type, save=True):
         """Insert at position in the hierarchy and adjust the
-        rest of the search categories' hierarchies so they're  in sequence.
+        rest of the search categories' hierarchies, so they're  in sequence.
 
         For example:
           apples = SearchCategory.objects.get(name="apples")
@@ -35,7 +40,15 @@ class SearchCategoryManager(models.Manager):
         :param app_type: The app specific SC to change, either hd or pro
         :param save: Optionally disable the save, so this can be called in the pre save.
         """
-        qs = self.get_queryset()
+        print(f"\n\nMOVING\n\n")
+        # Filter out categories that are sub categories
+        all_categories = self.get_queryset()
+        not_sub_categories_id = []
+        for category in all_categories:
+            if not category.has_attribute("parent") or (category.has_attribute("parent") and category.parent is None):
+                not_sub_categories_id.append(category.id)
+
+        qs = all_categories.filter(id__in=not_sub_categories_id)
         with transaction.atomic():
             temp_new_pos = int('99999' if new_pos is None else new_pos)
             temp_old_pos = int('99999' if old_pos is None else old_pos)

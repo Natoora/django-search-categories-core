@@ -61,6 +61,7 @@ class SearchCategorySyncService:
         app_c.image_blurred_hash = ws_sc.image_blurred_hash
         app_c.enabled = ws_sc.enabled
         app_c.deleted = ws_sc.deleted
+        app_c.parent = ws_sc.parent
         app_c.save()
         if ws_sc.background_image.name:
             os.system(f"scp {ws_sc.background_image.path} {self.image_destination}")

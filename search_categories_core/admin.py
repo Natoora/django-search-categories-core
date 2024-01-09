@@ -13,9 +13,10 @@ class _BaseAdmin(admin.ModelAdmin):
         "background_image",
         "image_cdn",
         "image_blurred_hash",
-        "sub_category",
+        "parent",
         "enabled",
         "deleted",
+        "products",
     ]
     list_display = [
         "hierarchy",
@@ -70,13 +71,16 @@ class AppSearchCategoryAdmin(_BaseAdmin):
     App SearchCategory Model admin page.
     """
     fields = _BaseAdmin.fields
-    readonly_fields = fields
+    readonly_fields = [
+        "code",
+        "synchronised",
+    ]
 
-    def has_add_permission(self, request):
-        return False
-
-    def has_change_permission(self, request, obj=None):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
+    # def has_add_permission(self, request):
+    #     return False
+    #
+    # def has_change_permission(self, request, obj=None):
+    #     return False
+    #
+    # def has_delete_permission(self, request, obj=None):
+    #     return False

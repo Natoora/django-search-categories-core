@@ -1,10 +1,12 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 
 
-class SearchCategorySerializer(ModelSerializer):
+class SearchCategorySerializer(serializers.ModelSerializer):
     """
     Serializer for the SearchCategory model.
     """
+
+    sub_categories = serializers.SerializerMethodField()
 
     class Meta:
         abstract = True
@@ -23,6 +25,10 @@ class SearchCategorySerializer(ModelSerializer):
             "app_type",
             "synchronised",
             "products",
-            "deleted"
+            "deleted",
+            "sub_categories",
         ]
         read_only_fields = fields
+
+    def get_sub_categories(self, instance):
+        return instance.sub_categories.all().values("name", "id")

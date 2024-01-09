@@ -33,7 +33,11 @@ class SearchCategoryCore(models.Model):
     name = models.CharField(max_length=50)
     code = models.CharField(max_length=20, editable=False, unique=True)
     hierarchy = models.IntegerField(default=1, null=True, blank=True)
-    background_image = models.ImageField(upload_to='products/search_categories/')
+    background_image = models.ImageField(
+        upload_to='products/search_categories/',
+        null=True,
+        blank=True,
+    )
     image_cdn = models.ImageField(
         upload_to=image_cdn_location,
         null=True,
