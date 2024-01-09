@@ -40,7 +40,6 @@ class SearchCategoryManager(models.Manager):
         :param app_type: The app specific SC to change, either hd or pro
         :param save: Optionally disable the save, so this can be called in the pre save.
         """
-        print(f"\n\nMOVING\n\n")
         # Filter out categories that are sub categories
         all_categories = self.get_queryset()
         not_sub_categories_id = []
