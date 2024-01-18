@@ -16,7 +16,6 @@ class _BaseAdmin(admin.ModelAdmin):
         "parent",
         "enabled",
         "deleted",
-        "products",
     ]
     list_display = [
         "hierarchy",
