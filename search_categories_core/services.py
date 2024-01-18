@@ -63,8 +63,6 @@ class SearchCategorySyncService:
         app_c.deleted = ws_sc.deleted
         app_c.parent = ws_sc.parent
         app_c.save()
-        if ws_sc.background_image.name:
-            os.system(f"scp {ws_sc.background_image.path} {self.image_destination}")
         return app_c
 
     def add_products(self, ws_sc, app_sc):

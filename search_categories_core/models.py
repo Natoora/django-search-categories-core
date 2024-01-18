@@ -4,10 +4,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone as tz
 
-from .gcloud_storage import GCloudStorage
+from storages.backends.gcloud import GoogleCloudStorage
 from .services import update_image_blurred_hash
-
-image_cdn_location = os.environ.get("SEARCH_CATEGORY_IMAGE_CDN_LOCATION", "search_categories/images")
 
 
 class SearchCategoryCore(models.Model):
@@ -35,10 +33,10 @@ class SearchCategoryCore(models.Model):
     hierarchy = models.IntegerField(default=1, null=True, blank=True)
     background_image = models.ImageField(upload_to='products/search_categories/')
     image_cdn = models.ImageField(
-        upload_to=image_cdn_location,
+        upload_to="images/search_categories",
         null=True,
         blank=True,
-        storage=GCloudStorage(),
+        storage=GoogleCloudStorage(),
         help_text="Google Cloud Stored product image.",
     )
     image_blurred_hash = models.CharField(
