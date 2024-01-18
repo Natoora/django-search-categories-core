@@ -51,13 +51,7 @@ class SearchCategorySyncService:
         app_c.app_type = ws_sc.app_type
         app_c.hierarchy = ws_sc.hierarchy
         app_c.tile_dimensions = ws_sc.tile_dimensions
-        app_c.background_image.name = ws_sc.background_image.name
-        with ws_sc.background_image.open() as img:
-            app_c.image_cdn.save(
-                name=os.path.basename(ws_sc.background_image.name),
-                content=File(img),
-                save=False,
-            )
+        app_c.image_cdn = ws_sc.image_cdn
         app_c.image_blurred_hash = ws_sc.image_blurred_hash
         app_c.enabled = ws_sc.enabled
         app_c.deleted = ws_sc.deleted
@@ -116,11 +110,9 @@ def update_image_blurred_hash(category):
 
     It is used in the pre_save, so only need to 'set' the field"""
 
-    if category.background_image:
-        image_content = category.background_image.read()
+    if category.image_cdn:
+        image_content = category.image_cdn.read()
         hash_value = blurhash.encode(
             BytesIO(image_content), x_components=9, y_components=9
         )
         category.image_blurred_hash = hash_value
-    else:
-        category.image_blurred_hash = None
