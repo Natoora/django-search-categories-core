@@ -6,8 +6,6 @@ class SearchCategorySerializer(serializers.ModelSerializer):
     Serializer for the SearchCategory model.
     """
 
-    sub_categories = serializers.SerializerMethodField()
-
     class Meta:
         abstract = True
         fields = [
@@ -26,9 +24,5 @@ class SearchCategorySerializer(serializers.ModelSerializer):
             "synchronised",
             "products",
             "deleted",
-            "sub_categories",
         ]
         read_only_fields = fields
-
-    def get_sub_categories(self, instance):
-        return instance.sub_categories.all().values("name", "id")
