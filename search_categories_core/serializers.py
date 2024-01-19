@@ -31,4 +31,7 @@ class SearchCategorySerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
     def get_sub_categories(self, instance):
-        return instance.sub_categories.all().values("name", "id")
+        if hasattr(instance, "sub_categories"):
+            return instance.sub_categories.all().values("name", "id")
+        else:
+            return []
