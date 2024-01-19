@@ -44,7 +44,7 @@ class SearchCategoryManager(models.Manager):
         all_categories = self.get_queryset()
         not_sub_categories_id = []
         for category in all_categories:
-            if not category.has_attribute("parent") or (category.has_attribute("parent") and category.parent is None):
+            if not category.has_attr("parent") or (category.has_attr("parent") and category.parent is None):
                 not_sub_categories_id.append(category.id)
 
         qs = all_categories.filter(id__in=not_sub_categories_id)
