@@ -14,7 +14,7 @@ class SearchCategoryManager(models.Manager):
         BUT taking into account the SC APP_TYPE too
         """
         instance = self.model(**kwargs)
-        if not instance.has_attr("parent") or (instance.has_attr("parent") and instance.parent is None):
+        if not hasattr(instance, "parent") or (hasattr(instance, "parent") and instance.parent is None):
             with transaction.atomic():
                 # Only update the hierarchy FIELD related to this instance's app_type: HD or PRO
                 # Also ignore sub categories - cats with parent field
@@ -44,7 +44,7 @@ class SearchCategoryManager(models.Manager):
         all_categories = self.get_queryset()
         not_sub_categories_id = []
         for category in all_categories:
-            if not category.has_attr("parent") or (category.has_attr("parent") and category.parent is None):
+            if not hasattr(category, "parent") or (hasattr(category, "parent") and category.parent is None):
                 not_sub_categories_id.append(category.id)
 
         qs = all_categories.filter(id__in=not_sub_categories_id)
