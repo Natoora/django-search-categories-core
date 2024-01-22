@@ -61,7 +61,12 @@ class SearchCategorySyncService:
         app_c.image_blurred_hash = ws_sc.image_blurred_hash
         app_c.enabled = ws_sc.enabled
         app_c.deleted = ws_sc.deleted
-        app_c.parent = ws_sc.parent
+        if hasattr(ws_sc, "parent"):
+            try:
+                app_parent_cat = self.AppCatModel.objects.get(code=ws_sc.parent.code)
+                app_c.parent = app_parent_cat
+            except self.AppCatModel.DoesNotExist:
+                pass
         app_c.save()
         return app_c
 
