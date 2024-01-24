@@ -13,7 +13,7 @@ class _BaseAdmin(admin.ModelAdmin):
         "background_image",
         "image_cdn",
         "image_blurred_hash",
-        "parents",
+        "parent",
         "enabled",
         "deleted",
     ]
