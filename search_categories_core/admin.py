@@ -69,7 +69,10 @@ class AppSearchCategoryAdmin(_BaseAdmin):
     """
     App SearchCategory Model admin page.
     """
-    fields = _BaseAdmin.fields
+    fields = _BaseAdmin.fields + [
+        "products",
+        "synchronised",
+    ]
     readonly_fields = fields
 
     def has_add_permission(self, request):
