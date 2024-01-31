@@ -31,7 +31,11 @@ class SearchCategoryCore(models.Model):
     name = models.CharField(max_length=50)
     code = models.CharField(max_length=20, editable=False, unique=True)
     hierarchy = models.IntegerField(default=1, null=True, blank=True)
-    background_image = models.ImageField(upload_to='products/search_categories/')
+    background_image = models.ImageField(
+        upload_to='products/search_categories/',
+        null=True,
+        blank=True
+    )
     image_cdn = models.ImageField(
         upload_to="images/search_categories",
         null=True,
@@ -57,12 +61,6 @@ class SearchCategoryCore(models.Model):
     deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["name", "app_type"],
-                condition=Q(deleted=False),
-                name="name_app_type_unique_if_not_deleted")
-        ]
         verbose_name = "Search Category"
         verbose_name_plural = "Search Categories"
         abstract = True
