@@ -32,6 +32,6 @@ class SearchCategorySerializer(serializers.ModelSerializer):
 
     def get_sub_categories(self, instance):
         if hasattr(instance, "sub_categories"):
-            return instance.sub_categories.all().values("name", "id")
+            return instance.sub_categories.all().filter(products__status="ACTIVE").distinct().values("name", "id")
         else:
             return []
