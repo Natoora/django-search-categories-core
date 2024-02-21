@@ -1,7 +1,4 @@
-import os
-
 from django.db import models
-from django.db.models import Q
 from django.utils import timezone as tz
 
 from storages.backends.gcloud import GoogleCloudStorage
@@ -32,10 +29,13 @@ class SearchCategoryCore(models.Model):
     code = models.CharField(max_length=20, editable=False, unique=True)
     hierarchy = models.IntegerField(default=1, null=True, blank=True)
     background_image = models.ImageField(
-        upload_to='products/search_categories/',
+        upload_to="images/search_categories",
         null=True,
-        blank=True
+        blank=True,
+        storage=GoogleCloudStorage(),
+        help_text="Google Cloud Stored product image.",
     )
+    # TODO: remove this field, serializer takes care of backwards compatability
     image_cdn = models.ImageField(
         upload_to="images/search_categories",
         null=True,

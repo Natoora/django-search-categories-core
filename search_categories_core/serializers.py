@@ -7,6 +7,7 @@ class SearchCategorySerializer(serializers.ModelSerializer):
     """
 
     sub_categories = serializers.SerializerMethodField()
+    image_cdn = serializers.SerializerMethodField()
 
     class Meta:
         abstract = True
@@ -35,3 +36,8 @@ class SearchCategorySerializer(serializers.ModelSerializer):
             return instance.sub_categories.all().filter(products__status="ACTIVE").distinct().values("name", "id")
         else:
             return []
+
+    def get_image_cdn(self, instance):
+        """Method for backwards compatability"""
+        if instance.background_image:
+            return instance.background_image.url
