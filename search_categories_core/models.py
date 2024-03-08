@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone as tz
 
-from storages.backends.gcloud import GoogleCloudStorage
+from ws.settings import DynamicGoogleCloudStorage
 from .services import update_image_blurred_hash
 
 
@@ -32,7 +32,7 @@ class SearchCategoryCore(models.Model):
         upload_to="images/search_categories",
         null=True,
         blank=True,
-        storage=GoogleCloudStorage(),
+        storage=DynamicGoogleCloudStorage(default_acl="publicRead"),
         help_text="Google Cloud Stored product image.",
     )
     # TODO: remove this field, serializer takes care of backwards compatability
@@ -40,7 +40,7 @@ class SearchCategoryCore(models.Model):
         upload_to="images/search_categories",
         null=True,
         blank=True,
-        storage=GoogleCloudStorage(),
+        storage=DynamicGoogleCloudStorage(default_acl="publicRead"),
         help_text="Google Cloud Stored product image.",
     )
     image_blurred_hash = models.CharField(
