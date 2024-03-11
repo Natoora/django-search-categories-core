@@ -4,7 +4,7 @@ from django.utils import timezone as tz
 from django.conf import settings
 from .services import update_image_blurred_hash
 
-# DynamicGoogleCloudStorage = getattr(settings, "APP_DEFAULT_STORAGE", None)
+DynamicGoogleCloudStorage = getattr(settings, "APP_DEFAULT_STORAGE", None)
 
 
 class SearchCategoryCore(models.Model):
