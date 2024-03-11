@@ -6,10 +6,10 @@ django-storages==1.13.1
 google-cloud-storage==2.9.0
 
 # Django framework
-django==3.2.15
+Django==4.0.3
 
 # Django rest framework
-djangorestframework==3.12.4
+djangorestframework==3.13.1
 
 # Python imaging library
 # https://pillow.readthedocs.io/
