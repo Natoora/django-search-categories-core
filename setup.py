@@ -27,6 +27,6 @@ setup(
     install_requires=[
         "Django>=4.0.3",
         "djangorestframework>=3.13.1",
-        "Pillow>=9.0.1"
+        "Pillow>=8.3"
     ]
 )
