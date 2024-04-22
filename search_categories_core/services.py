@@ -1,8 +1,8 @@
 import blurhash
-import os
+import logging
 from io import BytesIO
 
-from django.core.files import File
+logger = logging.getLogger(__name__)
 
 
 class SearchCategorySyncService:
@@ -31,10 +31,18 @@ class SearchCategorySyncService:
         """
         categories = self.categories_to_sync()
         for ws_sc in categories:
-            app_sc = self.update_app_search_category(ws_sc=ws_sc)
-            self.add_products(ws_sc=ws_sc, app_sc=app_sc)
-            self.remove_products(ws_sc=ws_sc, app_sc=app_sc)
-        categories.update(synchronised=True)
+            try:
+                app_sc = self.update_app_search_category(ws_sc=ws_sc)
+                self.add_products(ws_sc=ws_sc, app_sc=app_sc)
+                self.remove_products(ws_sc=ws_sc, app_sc=app_sc)
+                self.set_category_to_synchronised(ws_sc)
+            except Exception as e:
+                logger.exception(f"Exception syncing search category to app - category id: {ws_sc.id}: {e}")
+                continue
+
+    def set_category_to_synchronised(self, category):
+        """Set WS Search Categories to synchronised as TRUE"""
+        self.WsCatModel.objects.filter(id=category.id).update(synchronised=True)
 
     def update_app_search_category(self, ws_sc):
         """Update/create app search category to reflect the WS one.
