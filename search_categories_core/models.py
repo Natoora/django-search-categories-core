@@ -1,10 +1,8 @@
 from django.db import models
 from django.utils import timezone as tz
 
-from django.conf import settings
 from .services import update_image_blurred_hash
-
-GoogleCloudStorage = getattr(settings, "APP_DEFAULT_STORAGE", None)
+from storages.backends.gcloud import GoogleCloudStorage
 
 
 class SearchCategoryCore(models.Model):
