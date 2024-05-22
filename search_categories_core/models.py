@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils import timezone as tz
 
-from storages.backends.gcloud import GoogleCloudStorage
 from .services import update_image_blurred_hash
+from storages.backends.gcloud import GoogleCloudStorage
 
 
 class SearchCategoryCore(models.Model):
